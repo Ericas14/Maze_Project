@@ -6,6 +6,10 @@ def setup():
     global wallImage
     global smileyImage
     global emptyImage
+    global keyImage
+    global lockImage
+    global obtainedKey
+    obtainedKey = False
     size(600,600)
     sprite = []
     emptyImage = loadImage("empty.jpg")
@@ -15,7 +19,7 @@ def setup():
     lockImage = loadImage("lock.jpg")
     sprites = [ emptyImage, smileyImage, wallImage, keyImage, lockImage]
     
-    charc_r = 1
+    charc_r = 0
     charc_c = 2
     
     maze = [
@@ -57,11 +61,14 @@ def keyPressed():
     global wallImage
     global smileyImage
     global emptyImage
+    global obtainedKey
+    global keyImage
+    global lockImage
     
     nextStep = maze[charc_r][charc_c]
     
     if key == CODED:
-        if keyCode == RIGHT:
+        if keyCode == RIGHT and charc_c != 19:
             print("right")
             nextStep = maze[charc_r][charc_c + 1]
             
@@ -70,16 +77,42 @@ def keyPressed():
                 maze[charc_r][charc_c] = emptyImage
                 charc_c = charc_c + 1
                 
-                
+            if nextStep == keyImage:
+                obtainedKey = True
+                            
 
-        elif keyCode == LEFT:
+        elif keyCode == LEFT and charc_c != 0:
             print("left")
+            nextStep = maze[charc_r][charc_c - 1]
+            
+            if nextStep != wallImage:
+                maze[charc_r][charc_c - 1] = smileyImage
+                maze[charc_r][charc_c] = emptyImage
+                charc_c = charc_c - 1
 
-        elif keyCode == UP:
+        elif keyCode == UP and charc_r != 0:
             print("up")
+            nextStep = maze[charc_r - 1][charc_c]
+            
+            if nextStep != wallImage:
+                maze[charc_r - 1][charc_c] = smileyImage
+                maze[charc_r][charc_c] = emptyImage
+                charc_r = charc_r - 1
+                              
 
-        elif keyCode == DOWN:
+        elif keyCode == DOWN and charc_r != 19:
             print("down")
+            nextStep = maze[charc_r + 1][charc_c]
+            
+            if obtainedKey == True and nextStep != wallImage:
+                maze[charc_r + 1][charc_c] = smileyImage
+                maze[charc_r][charc_c] = emptyImage
+                charc_r = charc_r + 1
+            elif nextStep != wallImage and nextStep != lockImage:
+                maze[charc_r + 1][charc_c] = smileyImage
+                maze[charc_r][charc_c] = emptyImage
+                charc_r = charc_r + 1
     print(charc_r , charc_c)
+    print(obtainedKey)
             
             
