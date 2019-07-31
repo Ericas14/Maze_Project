@@ -1,3 +1,4 @@
+#isis was here
 def setup():
     global sprites
     global maze
